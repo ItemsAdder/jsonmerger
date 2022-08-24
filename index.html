@@ -1,0 +1,72 @@
+<html lang="en">
+    <style>
+        body {
+            background: #202124;
+            color: #e1e1e1;
+        }
+    </style>
+
+    <body>
+        <label for="json1">Json 1</label>
+        <br>
+        <textarea id="json1" rows="4" cols="50"></textarea>
+        <br>
+        <label for="json2">Json 2</label>
+        <br>
+        <textarea id="json2" rows="4" cols="50"></textarea>
+        <br>
+        <br>
+        <button id="btnMerge">Merge</button>
+        <br>
+        <br>
+        <label for="finalJson">Merged Json</label>
+        <br>
+        <textarea id="finalJson" rows="4" cols="50" readonly></textarea>
+        <br>
+        <br>
+        <button id="btnCopy">Copy result</button>
+    </body>
+
+    <script>
+
+        document.getElementById("btnMerge").addEventListener("click", ev => {
+
+            const json1Str = document.getElementById('json1').value
+            const json2Str = document.getElementById('json2').value
+
+            try
+            {
+                const json1 = JSON.parse(json1Str)
+                const json2 = JSON.parse(json2Str)
+
+                if(!json1.hasOwnProperty("overrides"))
+                {
+                    json1["overrides"] = []
+                }
+
+                if(!json2.hasOwnProperty("overrides"))
+                {
+                    alert("Json 2 doesn't contain 'overrides' property.")
+                    return;
+                }
+
+                json1["overrides"].push(json2["overrides"])
+
+                document.getElementById("finalJson").value = JSON.stringify(json1, null, 2)
+            }
+            catch (ex)
+            {
+                alert(ex.message)
+                console.error("Exception thrown", e.stack);
+            }
+
+        });
+
+        document.getElementById("btnCopy").addEventListener("click", ev => {
+            const finalJson = document.getElementById("finalJson");
+            navigator.clipboard.writeText(finalJson.value);
+            alert("Copied to clipboard");
+        });
+
+    </script>
+</html>
