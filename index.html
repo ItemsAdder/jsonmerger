@@ -50,7 +50,22 @@
                     return;
                 }
 
-                json1["overrides"].push(json2["overrides"])
+                json1["overrides"] = json1["overrides"].concat(json2["overrides"]);
+
+                function compare(a, b) {
+                    try {
+                        if (a.predicate.custom_model_data < b.predicate.custom_model_data) {
+                            return -1
+                        }
+                        if (a.predicate.custom_model_data > b.predicate.custom_model_data) {
+                            return 1
+                        }
+                    } catch (error) { 
+                        console.error(error) 
+                    }
+                    return 0
+                }
+                json1["overrides"].sort(compare)
 
                 document.getElementById("finalJson").value = JSON.stringify(json1, null, 2)
             }
